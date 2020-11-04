@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <title>social media buttons</title>
+
+    <style>
+        
+        .social-media li
+        {
+            background-color: yellowgreen;
+            list-style: none;
+            display: inline-block;
+            margin: 4px;
+            border-radius: .6em;
+            text-align: center;
+        }
+
+        ul .social-media
+        {
+            padding: 0;
+            text-align: center;
+        }
+
+        .social-media li a
+        {
+            display: block;
+            padding: .5em;
+            min-width: 1.1em;
+            max-width: 1.2em;
+            height: 1.1em;
+            white-space: nowrap;
+            line-height: 1.5em;
+            transition: .5s;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #ffffff;
+        }
+
+        .social-media li i
+        {
+            margin-right: 1.8em;
+        }
+
+        .social-media li:hover a
+        {
+            max-width: 200px;
+            padding-right: 1em;
+
+        }
+
+        .social-media .facebook
+        {
+            background-color: #3b5998;
+            box-shadow: 0 0 16px #3b5998;
+        }
+
+        .social-media .instagram
+        {
+            background-color: #cd486b;
+            box-shadow: 0 0 16px #cd486b;
+        }
+
+        .social-media .gmail
+        {
+            background-color: rgb(167, 36, 36);
+            box-shadow: 0 0 8px rgb(167, 36, 36);
+        }
+
+        .position-icons
+        {
+            position: absolute;
+            top: 80%;
+            left:10%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="position-icons">
+    <div class="social-media">
+        <ul>
+            <li class="facebook"><a href="#"><i class="fab fa-facebook-f"></i><span>facebook</span></a></li>
+            <li class="instagram"><a href="#"><i class="fab fa-instagram"></i><span>Instagram</span></a></li>
+            <li class="gmail"><a href="#"><i class="far fa-envelope"></i><span>Gmail</span></a></li>
+        </ul>
+    </div>
+</div>
+    
+</body>
+</html>

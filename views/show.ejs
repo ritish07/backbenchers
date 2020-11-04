@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BackBenchers</title>
+
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5f3979a7285fa93a"></script>
+
+</head>
+
+<body>
+  
+  <h1> <%= post.title %> </h1>
+  <h3> <%= post.publish_date %> </h3> 
+  <h5> published by <%= post.author.username %></h5>
+  <p> <%- post.sanitizedHtml %></p>
+  <button id="save-to-later">save later</button>
+  
+  <button type="button" id="like">like</button> 
+  
+  <span><%= post.likes %></span>
+  <a href="https://api.whatsapp.com/send?text=http://thebackbenchers.herokuapp.com/posts/engineering/<%= post._id %>" data-action="share/whatsapp/share" target="_blank">share on whatsapp</a>
+
+  <div id="message"></div>
+  
+  <script>
+ 
+    (function(){
+      var currentUser;
+      var currentPost;
+      var httpRequest;
+      var likebutton = document.getElementById("like");
+      likebutton.addEventListener('click', like);
+      var saveToLater = document.querySelector("#save-to-later");
+      saveToLater.addEventListener('click', savetolater);
+      
+
+      function findPostAndUser(){
+        
+        httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+          alert('Giving up :( Cannot create an XMLHTTP instance');
+          return false;
+        }
+        httpRequest.onreadystatechange = findPostAndUserRequest;
+        httpRequest.open('GET', 'http://thebackbenchers.herokuapp.com/posts/findPostIdAndUser/'+'<%= post.slug %>');        
+        httpRequest.send();
+      }
+
+      function findPostAndUserRequest(){
+          if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+              var respJson = JSON.parse(httpRequest.responseText)
+              currentPost = respJson.CurPost_id;
+              currentUser = respJson.curuser;
+              console.log(currentPost, currentUser)
+            } else {
+              alert('There was a problem with the request.');
+            }
+          }
+      }
+
+        window.addEventListener('load', function() {
+          findPostAndUser();
+        })
+        
+      function like(){
+        
+        var likeAvailable = true;
+        if(currentUser){
+          if(likeAvailable){
+            httpRequest = new XMLHttpRequest();
+            if (!httpRequest) {
+              alert('Giving up :( Cannot create an XMLHTTP instance');
+              return false;
+            }
+            httpRequest.onreadystatechange = likeRequest;
+            httpRequest.open('POST', 'http://thebackbenchers.herokuapp.com/posts/liked/' + '<%= post.slug %>');        
+            httpRequest.send();
+          } else {
+            document.querySelector("#message").innerHTML = "you have already liked this post";
+          }
+        } else {
+          document.querySelector("#message").innerHTML = "you need to log in to like this post";
+        }
+      }
+
+      function likeRequest(){
+          if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+              var respJson = JSON.parse(httpRequest.responseText)
+              console.log(respJson)
+              document.querySelector('span').innerHTML = respJson.likes;
+            } else {
+              alert('There was a problem with the request.');
+            }
+          }
+        }
+
+
+      function savetolater(){
+        httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+          alert('Giving up :( Cannot create an XMLHTTP instance');
+          return false;
+        }
+        httpRequest.onreadystatechange = savetolaterRequest;
+        httpRequest.open('POST', 'http://thebackbenchers.herokuapp.com/savetolater/' + '<%= post.slug %>');        
+        httpRequest.send();
+      }
+        
+      function savetolaterRequest(){
+        if(currentUser){
+          if (httpRequest.readyState === XMLHttpRequest.DONE) {
+          if (httpRequest.status === 200) {
+            console.log(httpRequest.responseText) 
+            console.log('saved to later')
+          } else {
+            alert('There was a problem with the request.');
+            }
+          }
+        } else {
+          document.querySelector("#message").innerHTML = "you need to log in to save to later this post";
+          
+        }
+      }
+              
+
+    })()
+  </script>
+
+</body>
+<!-- <script src="/javascripts/likebtn.js"></script> -->
+</html>
